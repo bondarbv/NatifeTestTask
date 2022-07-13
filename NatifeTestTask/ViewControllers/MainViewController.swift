@@ -97,20 +97,19 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.id)
                 as? CustomTableViewCell else { return UITableViewCell() }
         cell.setupCell(natifeInfoModel: natifes[indexPath.row])
-
-        if cell.descriptionLabel.numberOfLines == 1 {
-            cell.descriptionButton.removeFromSuperview()
-            cell.contentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        } else if cell.descriptionLabel.numberOfLines == 2 && cell.descriptionLabel.text?.count ?? 0 >= 100 {
-            cell.descriptionButton.removeFromSuperview()
-            cell.contentView.heightAnchor.constraint(equalToConstant: 125).isActive = true
-        }
         
         cell.handleState = {
             tableView.beginUpdates()
             tableView.endUpdates()
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailsViewController = DetailsViewController()
+        detailsViewController.setupDetailsViewController(natifeInfoModel: natifes[indexPath.row])
+        navigationController?.pushViewController(detailsViewController, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
