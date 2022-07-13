@@ -12,6 +12,8 @@ final class CustomTableViewCell: UITableViewCell {
     //MARK: - Cell ID
     static let id = "CustomCell"
     
+    private var post: Post?
+    
     var handleState: (() -> Void) = { }
     
     private enum DescriptionState {
@@ -30,7 +32,7 @@ final class CustomTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "SFProDisplay-Bold", size: 25)
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 20)
         label.textColor = #colorLiteral(red: 0.2775951028, green: 0.3229554296, blue: 0.369166106, alpha: 1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -89,11 +91,29 @@ final class CustomTableViewCell: UITableViewCell {
     }
     
     //MARK: - Setup Cell
-    func setupCell(natifeInfoModel: NatifeInfoModel) {
-        titleLabel.text = natifeInfoModel.title
-        descriptionLabel.text = natifeInfoModel.description
-        likesLabel.text = "❤️ \(natifeInfoModel.likesTitle)"
-        dateLabel.text = natifeInfoModel.dateTitle
+    func setupCell(_ p: Post) {
+        post = p
+        
+        guard post != nil else { return }
+        guard let likes = post?.likesCount! else { return }
+        
+        
+        let startDate = Date()
+        let bla = TimeInterval(post?.timeshamp ?? 0)
+        let endDate = Date(timeIntervalSince1970: bla)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let endDateString = dateFormatter.string(from: endDate)
+        
+        if let endDate = dateFormatter.date(from: endDateString) {
+            let components = Calendar.current.dateComponents([.day], from: endDate, to: startDate)
+            dateLabel.text = "\(components.day!) days ago"
+        }
+        
+        titleLabel.text = post?.title
+        descriptionLabel.text = post?.previewText
+        likesLabel.text = "❤️ \(likes)"
         
         if descriptionLabel.text?.count ?? 0 <= 100 && descriptionLabel.text?.count ?? 0 > 50 {
             descriptionButton.removeFromSuperview()
