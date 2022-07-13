@@ -12,7 +12,7 @@ final class CustomTableViewCell: UITableViewCell {
     //MARK: - Cell ID
     static let id = "CustomCell"
     
-    public var handleState: (() -> Void) = { }
+    var handleState: (() -> Void) = { }
     
     private enum DescriptionState {
         case collapse
@@ -36,7 +36,7 @@ final class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    public let descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         label.font = UIFont(name: "SFProDisplay-Regular", size: 18)
@@ -61,7 +61,7 @@ final class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    public let descriptionButton: UIButton = {
+    private let descriptionButton: UIButton = {
         let button = UIButton()
         button.setTitle("Expand", for: .normal)
         button.titleLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 18)
@@ -94,6 +94,14 @@ final class CustomTableViewCell: UITableViewCell {
         descriptionLabel.text = natifeInfoModel.description
         likesLabel.text = "❤️ \(natifeInfoModel.likesTitle)"
         dateLabel.text = natifeInfoModel.dateTitle
+        
+        if descriptionLabel.text?.count ?? 0 <= 100 && descriptionLabel.text?.count ?? 0 > 50 {
+            descriptionButton.removeFromSuperview()
+            contentView.heightAnchor.constraint(equalToConstant: 125).isActive = true
+        } else if descriptionLabel.text?.count ?? 0 <= 50 {
+            descriptionButton.removeFromSuperview()
+            contentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        }
     }
     
     //MARK: - Cell Init
