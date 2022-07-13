@@ -14,6 +14,9 @@
 		475CDDD4287C4B96006E7879 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 475CDDD2287C4B96006E7879 /* LaunchScreen.storyboard */; };
 		475CDDE0287C5024006E7879 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 475CDDDF287C5024006E7879 /* .gitignore */; };
 		4760491E287F376100715019 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4760491D287F376100715019 /* DetailsViewController.swift */; };
+		47604921287F3FB600715019 /* NewsFeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47604920287F3FB600715019 /* NewsFeedData.swift */; };
+		47604927287F657300715019 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47604926287F657300715019 /* Response.swift */; };
+		47604929287F666400715019 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47604928287F666400715019 /* PostsModel.swift */; };
 		479C35FC287C6DAE00138219 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479C35FB287C6DAE00138219 /* CustomTableViewCell.swift */; };
 		479C3603287C8EFA00138219 /* SF Pro Medium.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 479C3600287C8EFA00138219 /* SF Pro Medium.OTF */; };
 		479C3604287C8EFA00138219 /* SF Pro Regular.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 479C3601287C8EFA00138219 /* SF Pro Regular.OTF */; };
@@ -30,6 +33,9 @@
 		475CDDD5287C4B96006E7879 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		475CDDDF287C5024006E7879 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		4760491D287F376100715019 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		47604920287F3FB600715019 /* NewsFeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedData.swift; sourceTree = "<group>"; };
+		47604926287F657300715019 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		47604928287F666400715019 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
 		479C35FB287C6DAE00138219 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		479C3600287C8EFA00138219 /* SF Pro Medium.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF Pro Medium.OTF"; sourceTree = "<group>"; };
 		479C3601287C8EFA00138219 /* SF Pro Regular.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF Pro Regular.OTF"; sourceTree = "<group>"; };
@@ -66,6 +72,7 @@
 		475CDDC6287C4B95006E7879 /* NatifeTestTask */ = {
 			isa = PBXGroup;
 			children = (
+				4760491F287F3F4D00715019 /* NetworkManager */,
 				475CDDDE287C4EFA006E7879 /* Others */,
 				475CDDDD287C4EF4006E7879 /* Views */,
 				475CDDDC287C4EEC006E7879 /* ViewControllers */,
@@ -110,6 +117,16 @@
 				475CDDD5287C4B96006E7879 /* Info.plist */,
 			);
 			path = Others;
+			sourceTree = "<group>";
+		};
+		4760491F287F3F4D00715019 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				47604920287F3FB600715019 /* NewsFeedData.swift */,
+				47604926287F657300715019 /* Response.swift */,
+				47604928287F666400715019 /* PostsModel.swift */,
+			);
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 		479C35FD287C6DB300138219 /* Cells */ = {
@@ -207,7 +224,10 @@
 				475CDDCC287C4B95006E7879 /* MainViewController.swift in Sources */,
 				475CDDC8287C4B95006E7879 /* AppDelegate.swift in Sources */,
 				479C35FC287C6DAE00138219 /* CustomTableViewCell.swift in Sources */,
+				47604929287F666400715019 /* PostsModel.swift in Sources */,
 				475CDDCA287C4B95006E7879 /* SceneDelegate.swift in Sources */,
+				47604927287F657300715019 /* Response.swift in Sources */,
+				47604921287F3FB600715019 /* NewsFeedData.swift in Sources */,
 				4760491E287F376100715019 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

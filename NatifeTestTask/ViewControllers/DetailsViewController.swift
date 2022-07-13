@@ -47,14 +47,6 @@ class DetailsViewController: UIViewController {
         configureNavigationBar()
     }
     
-    func setupDetailsViewController(natifeInfoModel: NatifeInfoModel) {
-        imageView.image = UIImage(systemName: "cloud")
-        titleLabel.text = natifeInfoModel.title
-        descriptionLabel.text = natifeInfoModel.description
-        likesLabel.text = "❤️ \(natifeInfoModel.likesTitle)"
-        dateLabel.text = natifeInfoModel.dateTitle
-    }
-    
     private func configureNavigationBar() {
         navigationItem.title = "Natife"
         navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.2274509804, green: 0.3254901961, blue: 0.3647058824, alpha: 1)

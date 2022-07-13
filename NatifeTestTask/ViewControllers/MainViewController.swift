@@ -9,44 +9,8 @@ import UIKit
 
 final class MainViewController: UIViewController {
     
-    //MARK: - Data for test
-    private let natifes: [NatifeInfoModel] = [
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text some text some text some text some text some text some text some text some text some text Some text some text some text some text some text some text some text some text some text some text some text some text some text",
-            likesTitle: "1957",
-            dateTitle: "21 day ago"),
-        
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text some text some text some text some text some text some text some text some text some text Some text some text some text some text some text some text some text some text some text some text some text some text some text ",
-            likesTitle: "1957",
-            dateTitle: "21 day ago"),
-        
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text Some text some text some text some text Some text",
-            likesTitle: "1957",
-            dateTitle: "21 day ago"),
-        
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text some text some text some text some text some text some text some text some text some text Some text some text some text some text some text some text some text some text some text some text some text some text some text ",
-            likesTitle: "1957",
-            dateTitle: "21 day ago"),
-        
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text",
-            likesTitle: "1957",
-            dateTitle: "21 day ago"),
-        
-        NatifeInfoModel(
-            title: "Some title some title some title",
-            description: "Some text some text some text some text some text some text some text some text some text some text some text some text some text Some text some text some text some text some text some text some text some text some text some text some text some text some text ",
-            likesTitle: "1957",
-            dateTitle: "21 day ago")
-    ]
+    private var model = PostsModel()
+    private var posts = [Post]()
     
     private var mainTableView: UITableView!
     
@@ -56,10 +20,12 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .white
         configureNavigationBar()
         creatingTableView()
+        model.delegate = self
+        model.getPosts()
+        
     }
     
     @objc private func filterTableView() {
-        print("test")
     }
     
     //MARK: - NavigationBar configuration
@@ -84,19 +50,19 @@ final class MainViewController: UIViewController {
         mainTableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.id)
         view.addSubview(mainTableView)
     }
-    
 }
 
 //MARK: - TableView Delegate & DataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        natifes.count
+        posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.id)
                 as? CustomTableViewCell else { return UITableViewCell() }
-        cell.setupCell(natifeInfoModel: natifes[indexPath.row])
+        let post = posts[indexPath.row]
+        cell.setupCell(post)
         
         cell.handleState = {
             tableView.beginUpdates()
@@ -107,16 +73,17 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailsViewController = DetailsViewController()
-        detailsViewController.setupDetailsViewController(natifeInfoModel: natifes[indexPath.row])
+        print(posts[indexPath.row].postID)
         navigationController?.pushViewController(detailsViewController, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
-//MARK: - Model for test
-public struct NatifeInfoModel {
-    let title: String
-    let description: String
-    let likesTitle: String
-    let dateTitle: String
+extension MainViewController: PostsModelDelegate {
+    func postsFetched(_ posts: [Post]) {
+        self.posts = posts
+        DispatchQueue.main.async {
+            self.mainTableView.reloadData()
+        }
+    }
 }
