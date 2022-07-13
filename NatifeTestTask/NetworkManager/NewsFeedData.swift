@@ -24,10 +24,10 @@ struct Post: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        self.title = try? container.decode(String.self, forKey: .title)
-        self.previewText = try? container.decode(String.self, forKey: .previewText)
-        self.postID = try? container.decode(Int.self, forKey: .postID)
-        self.timeshamp = try? container.decode(Int.self, forKey: .timeshamp)
-        self.likesCount = try? container.decode(Int.self, forKey: .likesCount)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.previewText = try container.decode(String.self, forKey: .previewText)
+        self.postID = try container.decode(Int.self, forKey: .postID)
+        self.timeshamp = try container.decode(Int.self, forKey: .timeshamp)
+        self.likesCount = try container.decode(Int.self, forKey: .likesCount)
     }
 }

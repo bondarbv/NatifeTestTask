@@ -25,16 +25,24 @@ final class MainViewController: UIViewController {
         
     }
     
-    @objc private func filterTableView() {
-    }
-    
     //MARK: - NavigationBar configuration
     private func configureNavigationBar() {
         navigationItem.title = "Natife"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filterbutton"),
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(filterTableView))
+        
+        let items = UIMenu(title: "More", options: .displayInline, children: [
+        UIAction(title: "Sorting by date", image: UIImage(systemName: "calendar.badge.clock"), handler: { [unowned self] _ in
+            self.posts.sort(by: { $0.timeshamp! > $1.timeshamp! })
+            self.mainTableView.reloadData()
+        }),
+        UIAction(title: "Sorting by likes", image: UIImage(systemName: "heart"), handler: { [unowned self] _ in
+            self.posts.sort(by: { $0.likesCount! > $1.likesCount! })
+            self.mainTableView.reloadData()
+        }),
+        ])
+        
+        let menu = UIMenu(title: "Select a sorting method", children: [items])
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(named: "filterbutton"), primaryAction: nil, menu: menu)
         navigationItem.rightBarButtonItem?.tintColor = #colorLiteral(red: 0.2274509804, green: 0.3254901961, blue: 0.3647058824, alpha: 1)
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Bold", size: 20) ?? "",
