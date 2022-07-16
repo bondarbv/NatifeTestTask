@@ -9,20 +9,49 @@ import UIKit
 
 final class MainViewController: UIViewController {
     
-    private var model = PostsModel()
-    private var posts = [Post]()
+    private var networkManager = NetworkManager()
+    private var posts: [Post]?
     
-    private var mainTableView: UITableView!
+    //MARK: - TableView
+    private lazy var mainTableView: UITableView = {
+        let tableView = UITableView(frame: view.bounds, style: .plain)
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.id)
+        return tableView
+    }()
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
     
     //MARK: - ViewLifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         configureNavigationBar()
-        creatingTableView()
-        model.delegate = self
-        model.getPosts()
+        configureActivityIndicator()
+        networkManager.fetchPosts { [weak self] posts in
+            self?.posts = posts.posts
+        }
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            self.activityIndicator.stopAnimating()
+            self.view.addSubview(self.mainTableView)
+        }
+    }
+    
+    //MARK: - ActivityIndicator
+    private func configureActivityIndicator() {
+        view.addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        activityIndicator.startAnimating()
     }
     
     //MARK: - NavigationBar configuration
@@ -30,14 +59,14 @@ final class MainViewController: UIViewController {
         navigationItem.title = "Natife"
         
         let items = UIMenu(title: "More", options: .displayInline, children: [
-        UIAction(title: "Sorting by date", image: UIImage(systemName: "calendar.badge.clock"), handler: { [unowned self] _ in
-            self.posts.sort(by: { $0.timeshamp! > $1.timeshamp! })
-            self.mainTableView.reloadData()
-        }),
-        UIAction(title: "Sorting by likes", image: UIImage(systemName: "heart"), handler: { [unowned self] _ in
-            self.posts.sort(by: { $0.likesCount! > $1.likesCount! })
-            self.mainTableView.reloadData()
-        }),
+            UIAction(title: "Sorting by date", image: UIImage(systemName: "calendar.badge.clock"), handler: { [unowned self] _ in
+                self.posts?.sort(by: { $0.timeshamp > $1.timeshamp })
+                self.mainTableView.reloadData()
+            }),
+            UIAction(title: "Sorting by likes", image: UIImage(systemName: "heart"), handler: { [unowned self] _ in
+                self.posts?.sort(by: { $0.likesCount > $1.likesCount })
+                self.mainTableView.reloadData()
+            }),
         ])
         
         let menu = UIMenu(title: "Select a sorting method", children: [items])
@@ -48,29 +77,21 @@ final class MainViewController: UIViewController {
             NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Bold", size: 20) ?? "",
             NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2274509804, green: 0.3254901961, blue: 0.3647058824, alpha: 1)]
     }
-    
-    //MARK: - Creating a TableView
-    private func creatingTableView() {
-        mainTableView = UITableView(frame: view.bounds, style: .plain)
-        mainTableView.separatorStyle = .none
-        mainTableView.delegate = self
-        mainTableView.dataSource = self
-        mainTableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.id)
-        view.addSubview(mainTableView)
-    }
 }
 
 //MARK: - TableView Delegate & DataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        posts.count
+        posts?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.id)
                 as? CustomTableViewCell else { return UITableViewCell() }
-        let post = posts[indexPath.row]
-        cell.setupCell(post)
+        
+        if let post = posts?[indexPath.row] {
+            cell.setupCell(with: post)
+        }
         
         cell.handleState = {
             tableView.beginUpdates()
@@ -81,17 +102,14 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailsViewController = DetailsViewController()
-        print(posts[indexPath.row].postID)
-        navigationController?.pushViewController(detailsViewController, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
-extension MainViewController: PostsModelDelegate {
-    func postsFetched(_ posts: [Post]) {
-        self.posts = posts
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
+        guard let id = posts?[indexPath.row].postID else { return }
+        networkManager.fetchSinglePost(id: id) { singlePost in
+            DispatchQueue.main.async {
+                detailsViewController.setupDetailsViewController(with: singlePost)
+            }
         }
+        navigationController?.pushViewController(detailsViewController, animated: true)
+        detailsViewController.activityIndicator.startAnimating()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

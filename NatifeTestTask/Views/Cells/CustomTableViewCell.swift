@@ -12,8 +12,9 @@ final class CustomTableViewCell: UITableViewCell {
     //MARK: - Cell ID
     static let id = "CustomCell"
     
-    private var post: Post?
+    private var posts: Post?
     
+    //MARK: - Expand/Collapse
     var handleState: (() -> Void) = { }
     
     private enum DescriptionState {
@@ -30,6 +31,7 @@ final class CustomTableViewCell: UITableViewCell {
     
     private var descriptionState = DescriptionState.collapse
     
+    //MARK: - UI
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "SFProDisplay-Bold", size: 20)
@@ -38,7 +40,7 @@ final class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private let previewLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         label.font = UIFont(name: "SFProDisplay-Regular", size: 18)
@@ -63,44 +65,40 @@ final class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let descriptionButton: UIButton = {
+    private lazy var previewButton: UIButton = {
         let button = UIButton()
         button.setTitle("Expand", for: .normal)
         button.titleLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 18)
         button.backgroundColor = #colorLiteral(red: 0.2775951028, green: 0.3229554296, blue: 0.369166106, alpha: 1)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(updateDescriptionLabel), for: .touchUpInside)
+        button.addTarget(self, action: #selector(updatePreviewLabel), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    @objc private func updateDescriptionLabel() {
+    //MARK: - previewButton func
+    @objc private func updatePreviewLabel() {
         switch descriptionState {
         case .expand:
-            descriptionButton.setTitle("Expand", for: .normal)
+            previewButton.setTitle("Expand", for: .normal)
             heightAnchor.constraint(equalToConstant: 200).isActive = true
-            descriptionLabel.numberOfLines = 2
+            previewLabel.numberOfLines = 2
             handleState()
         case .collapse:
-            descriptionButton.setTitle("Collapse", for: .normal)
+            previewButton.setTitle("Collapse", for: .normal)
             heightAnchor.constraint(equalToConstant: 300).isActive = true
-            descriptionLabel.numberOfLines = 0
+            previewLabel.numberOfLines = 0
             handleState()
         }
         descriptionState.toggle()
     }
     
     //MARK: - Setup Cell
-    func setupCell(_ p: Post) {
-        post = p
-        
-        guard post != nil else { return }
-        guard let likes = post?.likesCount! else { return }
-        
-        
+    func setupCell(with p: Post) {
+        posts = p
         let startDate = Date()
-        let bla = TimeInterval(post?.timeshamp ?? 0)
-        let endDate = Date(timeIntervalSince1970: bla)
+        let endDateTimeInterval = TimeInterval(p.timeshamp)
+        let endDate = Date(timeIntervalSince1970: endDateTimeInterval)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
@@ -111,15 +109,15 @@ final class CustomTableViewCell: UITableViewCell {
             dateLabel.text = "\(components.day!) days ago"
         }
         
-        titleLabel.text = post?.title
-        descriptionLabel.text = post?.previewText
-        likesLabel.text = "❤️ \(likes)"
+        titleLabel.text = p.title
+        previewLabel.text = p.previewText
+        likesLabel.text = "❤️ \(p.likesCount)"
         
-        if descriptionLabel.text?.count ?? 0 <= 100 && descriptionLabel.text?.count ?? 0 > 50 {
-            descriptionButton.removeFromSuperview()
+        if previewLabel.text?.count ?? 0 <= 100 && previewLabel.text?.count ?? 0 > 50 {
+            previewButton.removeFromSuperview()
             contentView.heightAnchor.constraint(equalToConstant: 125).isActive = true
-        } else if descriptionLabel.text?.count ?? 0 <= 50 {
-            descriptionButton.removeFromSuperview()
+        } else if previewLabel.text?.count ?? 0 <= 50 {
+            previewButton.removeFromSuperview()
             contentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
         }
     }
@@ -137,10 +135,10 @@ final class CustomTableViewCell: UITableViewCell {
     //MARK: - Layout
     private func layout() {
         contentView.addSubview(titleLabel)
-        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(previewLabel)
         contentView.addSubview(likesLabel)
         contentView.addSubview(dateLabel)
-        contentView.addSubview(descriptionButton)
+        contentView.addSubview(previewButton)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -148,21 +146,21 @@ final class CustomTableViewCell: UITableViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             titleLabel.heightAnchor.constraint(equalToConstant: 25),
             
-            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            previewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            previewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            previewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+            likesLabel.topAnchor.constraint(equalTo: previewLabel.bottomAnchor, constant: 20),
             likesLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             
             dateLabel.topAnchor.constraint(equalTo: likesLabel.topAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            descriptionButton.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 20),
-            descriptionButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            descriptionButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            descriptionButton.heightAnchor.constraint(equalToConstant: 50),
-            descriptionButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            previewButton.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 20),
+            previewButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            previewButton.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            previewButton.heightAnchor.constraint(equalToConstant: 50),
+            previewButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }
