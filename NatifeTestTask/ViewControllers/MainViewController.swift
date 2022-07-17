@@ -10,17 +10,11 @@ import UIKit
 final class MainViewController: UIViewController {
     
     private var networkManager = NetworkManager()
+    private var url = URL(string: "https://raw.githubusercontent.com/anton-natife/jsons/master/api/main.json")
     private var posts: [Post]?
     
     //MARK: - TableView
-    private lazy var mainTableView: UITableView = {
-        let tableView = UITableView(frame: view.bounds, style: .plain)
-        tableView.separatorStyle = .none
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.id)
-        return tableView
-    }()
+    private var mainTableView: UITableView!
     
     let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
@@ -35,15 +29,32 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .white
         configureNavigationBar()
         configureActivityIndicator()
-        networkManager.fetchPosts { [weak self] posts in
-            self?.posts = posts.posts
-        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.activityIndicator.stopAnimating()
-            self.view.addSubview(self.mainTableView)
+        networkManager.fetchData(url: url, type: PostsModel.self) { posts in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.posts = posts.posts
+                self.configureTableView()
+                self.activityIndicator.stopAnimating()
+            }
         }
+    }
+    
+    //MARK: - TableView
+    func configureTableView() {
+        mainTableView = UITableView()
+        mainTableView.separatorStyle = .none
+        mainTableView.delegate = self
+        mainTableView.dataSource = self
+        mainTableView.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.id)
+        mainTableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(mainTableView)
+        
+        mainTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        mainTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        mainTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        mainTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
     //MARK: - ActivityIndicator
@@ -103,13 +114,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailsViewController = DetailsViewController()
         guard let id = posts?[indexPath.row].postID else { return }
-        networkManager.fetchSinglePost(id: id) { singlePost in
-            DispatchQueue.main.async {
-                detailsViewController.setupDetailsViewController(with: singlePost)
-            }
-        }
+        let url = URL(string: "https://raw.githubusercontent.com/anton-natife/jsons/master/api/posts/\(id).json")
+        detailsViewController.singlePostUrl = url
         navigationController?.pushViewController(detailsViewController, animated: true)
-        detailsViewController.activityIndicator.startAnimating()
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

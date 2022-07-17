@@ -1,5 +1,5 @@
 //
-//  Posts.swift
+//  PostsModel.swift
 //  NatifeTestTask
 //
 //  Created by Bohdan on 16.07.2022.
@@ -7,19 +7,17 @@
 
 import Foundation
 
-struct Posts: Codable {
+struct PostsModel: Codable {
     let posts: [Post]
 }
 
-// MARK: - Post
 struct Post: Codable {
-    let postID, timeshamp: Int
+    let postID, timeshamp, likesCount: Int
     let title, previewText: String
-    let likesCount: Int
     
     enum CodingKeys: String, CodingKey {
-        case postID = "postId"
         case timeshamp, title
+        case postID = "postId"
         case previewText = "preview_text"
         case likesCount = "likes_count"
     }

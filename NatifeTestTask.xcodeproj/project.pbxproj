@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4744EBF82881A5C500D39CE1 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4744EBF72881A5C400D39CE1 /* NetworkManager.swift */; };
-		4747D8962882C64100771721 /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747D8952882C64100771721 /* Posts.swift */; };
-		4747D8982882C65000771721 /* SinglePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747D8972882C65000771721 /* SinglePost.swift */; };
+		4747D8962882C64100771721 /* PostsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747D8952882C64100771721 /* PostsModel.swift */; };
+		4747D8982882C65000771721 /* SinglePostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747D8972882C65000771721 /* SinglePostModel.swift */; };
 		475CDDC8287C4B95006E7879 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CDDC7287C4B95006E7879 /* AppDelegate.swift */; };
 		475CDDCA287C4B95006E7879 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CDDC9287C4B95006E7879 /* SceneDelegate.swift */; };
 		475CDDCC287C4B95006E7879 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 475CDDCB287C4B95006E7879 /* MainViewController.swift */; };
@@ -25,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		4744EBF72881A5C400D39CE1 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		4747D8952882C64100771721 /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
-		4747D8972882C65000771721 /* SinglePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePost.swift; sourceTree = "<group>"; };
+		4747D8952882C64100771721 /* PostsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsModel.swift; sourceTree = "<group>"; };
+		4747D8972882C65000771721 /* SinglePostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinglePostModel.swift; sourceTree = "<group>"; };
 		475CDDC4287C4B95006E7879 /* NatifeTestTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NatifeTestTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		475CDDC7287C4B95006E7879 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		475CDDC9287C4B95006E7879 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				4760491F287F3F4D00715019 /* NetworkManager */,
-				475CDDDE287C4EFA006E7879 /* Others */,
+				475CDDDE287C4EFA006E7879 /* Resources */,
 				475CDDDD287C4EF4006E7879 /* Views */,
 				475CDDDC287C4EEC006E7879 /* ViewControllers */,
 				475CDDDB287C4EE2006E7879 /* App */,
@@ -108,7 +108,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		475CDDDE287C4EFA006E7879 /* Others */ = {
+		475CDDDE287C4EFA006E7879 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				479C35FF287C8EC500138219 /* Fonts */,
@@ -116,15 +116,15 @@
 				475CDDD0287C4B96006E7879 /* Assets.xcassets */,
 				475CDDD5287C4B96006E7879 /* Info.plist */,
 			);
-			path = Others;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		4760491F287F3F4D00715019 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
 				4744EBF72881A5C400D39CE1 /* NetworkManager.swift */,
-				4747D8952882C64100771721 /* Posts.swift */,
-				4747D8972882C65000771721 /* SinglePost.swift */,
+				4747D8952882C64100771721 /* PostsModel.swift */,
+				4747D8972882C65000771721 /* SinglePostModel.swift */,
 			);
 			path = NetworkManager;
 			sourceTree = "<group>";
@@ -222,9 +222,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				475CDDCC287C4B95006E7879 /* MainViewController.swift in Sources */,
-				4747D8962882C64100771721 /* Posts.swift in Sources */,
+				4747D8962882C64100771721 /* PostsModel.swift in Sources */,
 				475CDDC8287C4B95006E7879 /* AppDelegate.swift in Sources */,
-				4747D8982882C65000771721 /* SinglePost.swift in Sources */,
+				4747D8982882C65000771721 /* SinglePostModel.swift in Sources */,
 				479C35FC287C6DAE00138219 /* CustomTableViewCell.swift in Sources */,
 				4744EBF82881A5C500D39CE1 /* NetworkManager.swift in Sources */,
 				475CDDCA287C4B95006E7879 /* SceneDelegate.swift in Sources */,
@@ -369,7 +369,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7288C3T3B9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NatifeTestTask/Others/Info.plist;
+				INFOPLIST_FILE = NatifeTestTask/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -398,7 +398,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7288C3T3B9;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NatifeTestTask/Others/Info.plist;
+				INFOPLIST_FILE = NatifeTestTask/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

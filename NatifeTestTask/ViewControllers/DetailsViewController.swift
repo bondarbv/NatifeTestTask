@@ -9,10 +9,11 @@ import UIKit
 
 final class DetailsViewController: UIViewController {
     
-    private var singlePost: SinglePost?
+    private var networkManager = NetworkManager()
+    var singlePostUrl: URL?
     
     //MARK: - UI
-    let activityIndicator: UIActivityIndicatorView = {
+    private let activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.hidesWhenStopped = true
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +73,14 @@ final class DetailsViewController: UIViewController {
         configureNavigationBar()
         configureScrollView()
         layout()
-        activityIndicator.stopAnimating()
+        activityIndicator.startAnimating()
+        
+        networkManager.fetchData(url: singlePostUrl, type: SinglePostModel.self) { singlePost in
+            DispatchQueue.main.async { [weak self] in
+                self?.updateDetailsViewController(with: singlePost)
+                self?.activityIndicator.stopAnimating()
+            }
+        }
     }
     
     //MARK: - NavigationBar
@@ -92,9 +100,7 @@ final class DetailsViewController: UIViewController {
         scrollView.contentSize.width = view.bounds.width
     }
     
-    func setupDetailsViewController(with p: SinglePost) {
-        singlePost = p
-        
+    private func updateDetailsViewController(with p: SinglePostModel) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMMM yyyy"
         let timeInterval = Date(timeIntervalSince1970: TimeInterval(p.post.timeshamp))
