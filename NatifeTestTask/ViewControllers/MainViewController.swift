@@ -73,10 +73,12 @@ final class MainViewController: UIViewController {
             UIAction(title: "Sorting by date", image: UIImage(systemName: "calendar.badge.clock"), handler: { [unowned self] _ in
                 self.posts?.sort(by: { $0.timeshamp > $1.timeshamp })
                 self.mainTableView.reloadData()
+                self.scrollToTop()
             }),
             UIAction(title: "Sorting by likes", image: UIImage(systemName: "heart"), handler: { [unowned self] _ in
                 self.posts?.sort(by: { $0.likesCount > $1.likesCount })
                 self.mainTableView.reloadData()
+                self.scrollToTop()
             }),
         ])
         
@@ -87,6 +89,12 @@ final class MainViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font: UIFont(name: "SFProDisplay-Bold", size: 20) ?? "",
             NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.2274509804, green: 0.3254901961, blue: 0.3647058824, alpha: 1)]
+    }
+    
+    //MARK: - TableView Scroll To Top
+    private func scrollToTop() {
+        let topRow = IndexPath(row: 0, section: 0)
+        mainTableView.scrollToRow(at: topRow, at: .top, animated: true)
     }
 }
 
