@@ -12,8 +12,6 @@ final class CustomTableViewCell: UITableViewCell {
     //MARK: - Cell ID
     static let id = "CustomCell"
     
-    private var posts: Post?
-    
     //MARK: - Expand/Collapse
     var handleState: (() -> Void) = { }
     
@@ -95,7 +93,6 @@ final class CustomTableViewCell: UITableViewCell {
     
     //MARK: - Setup Cell
     func setupCell(with p: Post) {
-        posts = p
         let startDate = Date()
         let endDateTimeInterval = TimeInterval(p.timeshamp)
         let endDate = Date(timeIntervalSince1970: endDateTimeInterval)
